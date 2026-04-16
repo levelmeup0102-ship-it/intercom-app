@@ -24,9 +24,13 @@ function Login({ onLoginSuccess }) {
   const [password, setPassword] = useState('')
   
   // 회원가입 폼
-  const [name, setName] = useState('')
+  const [nameSelect, setNameSelect] = useState('')  // 드롭다운 선택값
+  const [customName, setCustomName] = useState('')  // 직접 입력값
   const [userType, setUserType] = useState('mobile') // 'station' or 'mobile'
   const [stationName, setStationName] = useState('')
+  
+  // 실제 사용할 이름
+  const name = nameSelect === '__custom__' ? customName : nameSelect
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -138,9 +142,9 @@ function Login({ onLoginSuccess }) {
               <div className="form-group">
                 <label>표시 이름</label>
                 <select 
-                  value={name} 
-                  onChange={(e) => setName(e.target.value)}
-                  required
+                  value={nameSelect} 
+                  onChange={(e) => setNameSelect(e.target.value)}
+                  required={nameSelect !== '__custom__'}
                 >
                   <option value="">선택하세요</option>
                   {TEACHER_LIST.map((t) => (
@@ -148,11 +152,12 @@ function Login({ onLoginSuccess }) {
                   ))}
                   <option value="__custom__">직접 입력</option>
                 </select>
-                {name === '__custom__' && (
+                {nameSelect === '__custom__' && (
                   <input
                     type="text"
                     style={{ marginTop: '8px' }}
-                    onChange={(e) => setName(e.target.value)}
+                    value={customName}
+                    onChange={(e) => setCustomName(e.target.value)}
                     placeholder="이름 입력"
                     required
                   />
